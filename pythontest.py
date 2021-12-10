@@ -7,16 +7,23 @@ parser.add_argument("command", default="print", choices=["balance", "register", 
 
 args = parser.parse_args()
 
-try: 
+try:
     with open(args.file) as f:
-        data = (f.read())
+        data = f.readlines()[1:]
         f.close()
 except FileNotFoundError:
     print('File not found')
 
 
 if args.command == "print":
-    print(data)
+    for line in data:
+        print(line)
 
 
 
+if args.command == "balance":
+    print("Balance Function")
+
+
+if args.command == "register":
+    print("Register Function")
