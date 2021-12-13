@@ -18,9 +18,9 @@
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 [![Contributors][contributors-shield]][contributors-url]
-[![Language][language-shield]]
-[![Repo Size][reposize-shield]]
-[![Last Commit][last-commit-shield]]
+![Language][language-shield]
+![Repo Size][reposize-shield]
+![Last Commit][last-commit-shield]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 [![Medium][medium-shield]][medium-url]
