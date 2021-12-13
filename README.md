@@ -148,7 +148,7 @@ REQUIRED COMMAND (Only enter one of the following):
   python3 ledgertruji.py -f FILE print
   ```
 <div align='center'>
-<img src="images/printfunction.png" alt="Print Function" width="80" height="80">
+<img src="images/printfunction.png" alt="Print Function">
 </div>
 
 - Register: The register command displays all the postings occurring in a single account, line by line. The output from register is very close to what a typical checkbook, or single-account ledger, would look like. It also shows a running balance. The final running balance of any register should always be the same as the current balance of that account.
@@ -156,7 +156,7 @@ REQUIRED COMMAND (Only enter one of the following):
   python3 ledgertruji.py -f FILE {reg or register}
   ```
   <div align='center'>
-<img src="images/regfunction.png" alt="Register Function" width="80" height="80">
+<img src="images/regfunction.png" alt="Register Function">
 </div>
 
 - Balance: The balance command reports the current balance of all accounts. If an account contains multiple types of commodities, each commodity’s total is reported separately.
@@ -164,7 +164,7 @@ REQUIRED COMMAND (Only enter one of the following):
   python3 ledgertruji.py -f FILE {bal or balance}
   ```
   <div align='center'>
-<img src="images/balfunction.png" alt="Balance Function" width="80" height="80">
+<img src="images/balfunction.png" alt="Balance Function">
 </div>
 
 OPTIONAL FLAGS:
@@ -173,20 +173,20 @@ OPTIONAL FLAGS:
   python3 ledgertruji.py -f FILE command --sort {d or c}
   ```
 <div align='center'>
-<img src="images/sort by date.png" alt="Sort by date" width="80" height="80">
+<img src="images/sort by date.png" alt="Sort by date">
 </div>
 <div align='center'>
-<img src="images/sort by comment.png" alt="Sort by comment" width="80" height="80">
+<img src="images/sort by comment.png" alt="Sort by comment">
 </div>
 - Price-DB: Use FILE for retrieving stored commodity prices. Display values in terms of the given currency or commodity. The specified currency or commodity must be in the price-db.
   ```sh
   python3 ledgertruji.py -f FILE command --price-db FILE CURRENCY
   ```
 <div align='center'>
-<img src="images/pricedbus.png" alt="Price DB Function to $US" width="80" height="80">
+<img src="images/pricedbus.png" alt="Price DB Function to $US">
 </div>
 <div align='center'>
-<img src="images/pricedbbtc.png" alt="Price DB Function to BTC" width="80" height="80">
+<img src="images/pricedbbtc.png" alt="Price DB Function to BTC">
 </div>
 
 
