@@ -31,23 +31,23 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
+  <a href="https://github.com/trujillo9616/BreakableToy">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">project_title</h3>
+<h3 align="center">Ledgertruji</h3>
 
   <p align="center">
-    project_description
+    A simple Ledger CLI implementation in Python.
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/trujllo9616/BreakableToy"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <a href="https://github.com/trujillo9616/BreakableToy">View Demo</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
+    <a href="https://github.com/trujillo9616/BreakableToy/issues">Report Bug</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
+    <a href="https://github.com/trujillo9616/BreakableToy/issues">Request Feature</a>
   </p>
 </div>
 
@@ -86,22 +86,14 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email`, `email_client`, `project_title`, `project_description`
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 ### Built With
 
-* [Next.js](https://nextjs.org/)
-* [React.js](https://reactjs.org/)
-* [Vue.js](https://vuejs.org/)
-* [Angular](https://angular.io/)
-* [Svelte](https://svelte.dev/)
-* [Laravel](https://laravel.com)
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
+* [Python](https://www.python.org/)
+* [Argparse](https://docs.python.org/3/library/argparse.html)
+* [Numpy](https://numpy.org/)
+* [Tabulate](https://pypi.org/project/tabulate/)
+* [Colored](https://pypi.org/project/colored/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -115,26 +107,25 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+Prior to installing and downloading the files you will need to have Python installed. You can find the installation instructions [here](https://www.python.org/downloads/). Or run the following command to install Python.
 * npm
   ```sh
-  npm install npm@latest -g
+  brew install python
   ```
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/trujillo9616/BreakableToy.git
    ```
-3. Install NPM packages
+2. Install packages
    ```sh
-   npm install
+   pip3 install requirements.txt
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
+3. Run the project
+   ```sh
+   python3 ledgertruji.py --help
    ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -144,9 +135,35 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+This small implementation of the Ledger CLI in Python supports the following commands and flags:
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+REQUIRED FLAG:
+- File: Read FILE as a ledger file.
+    -f --file {filename}
+
+
+REQUIRED COMMAND (Only enter one of the following):
+- Print: The print command prints out ledger transactions in a textual format that can be parsed by Ledger. They will be properly formatted, and output in the most economic form possible.
+    print
+
+- Register: The register command displays all the postings occurring in a single account, line by line. The output from register is very close to what a typical checkbook, or single-account ledger, would look like. It also shows a running balance. The final running balance of any register should always be the same as the current balance of that account.
+    reg register
+
+- Balance: The balance command reports the current balance of all accounts. If an account contains multiple types of commodities, each commodity’s total is reported separately.
+    bal balance
+
+
+OPTIONAL FLAGS:
+- File: Read FILE as a ledger file.
+    -f --file {filename}
+
+- Sort: Sort the register or print report based on the date the postings were made.
+    -s --sort {d}
+
+- Price-DB: Use FILE for retrieving stored commodity prices. Display values in terms of the given currency or commodity. The specified currency or commodity must be in the price-db.
+    -p --price-db {filename currency/commodity}
+
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -155,12 +172,11 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [] Feature 1
-- [] Feature 2
-- [] Feature 3
-    - [] Nested Feature
+- [] Colored Results (negative numbers in red!)
+- [] Filter results based on a regex input
+- [] Multiple reports
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/trujillo9616/BreakableToy/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -196,9 +212,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Adrian Trujillo - [@trujillo9616](https://twitter.com/trujillo9616)com
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
+Project Link: [https://github.com/trujillo9616/BreakableToy](https://github.com/trujillo9616/BreakableToy)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -207,9 +223,8 @@ Project Link: [https://github.com/github_username/repo_name](https://github.com/
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+* Staff memebers and mentors for their guidance and support
+* Jorge Garcia for his support and providing me resources that allowed me to develop the project
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
