@@ -108,7 +108,6 @@ def readfile(filename):
         print('File not found, please check the file name')
         exit()
 
-
 #READ PRICE-DB Function
 def read_pricedb(filename):
     """
@@ -135,7 +134,6 @@ def read_pricedb(filename):
     except FileNotFoundError:
         print('Price-DB file not found, please check the file name')
         exit()
-
 
 #EXCHANGE Function
 def exchange_values(transactions, exchange, currency=defaultcurrency):
@@ -168,7 +166,6 @@ def exchange_values(transactions, exchange, currency=defaultcurrency):
                 tr.amount2[0] = currency
     else:
         print('Currency not found in Price-DB, please check the currency or update the Price-DB.')
-
 
 #PARSE Function
 def parse(data):
@@ -210,7 +207,6 @@ def parse(data):
         transactions.append(Transaction(date, comment, account1,
         amount1, account2, amount2))
 
-
 #PRINT COMMAND
 def print_ledger(transactions, sort=False, *regex):
     """
@@ -247,8 +243,6 @@ def print_ledger(transactions, sort=False, *regex):
         else:
             print('\t\t' + (purple+'{:30}'.format(t.account2)+white) + '\t\t\t\t' + t.amount2[0]+' '+amount2)
 
-
-
 #REGISTER COMMAND
 def register_ledger(transactions, sort=False, *regex):
     """
@@ -282,8 +276,6 @@ def register_ledger(transactions, sort=False, *regex):
 
     print(tabulate(register, headers))
 
-
-
 #PRINT NODE Function
 def print_node(node):
     """
@@ -302,8 +294,6 @@ def print_node(node):
         for childnode in node.children:
             print_node(childnode) #<-- Recursive function
 
-
-
 #BALANCE COMMAND
 def balance_ledger(transactions, *regex):
     """
@@ -314,7 +304,6 @@ def balance_ledger(transactions, *regex):
 
     :return: Print onto console the balance of the accounts.
     """
-
     tree = Main()
     currentnode = Node('root')
     tree.root = currentnode
@@ -359,8 +348,7 @@ def balance_ledger(transactions, *regex):
     print(tabulate(bal, headers))
 
 
-
-
+#MAIN FUNCTION
 #CLI Application Implementation
 parser = argparse.ArgumentParser(
     prog='ledgertruji',
