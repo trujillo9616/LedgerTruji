@@ -84,7 +84,23 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[Ledger](https://www.ledger-cli.org/) is a powerful, double-entry accounting system that is accessed from the UNIX command-line. This may put off some users, as there is no flashy UI, but for those who want unparalleled reporting access to their data, there really is no alternative.
+
+Here are some of the features of Ledger which set it apart from other accounting systems:
+
+- Ledger never creates or modifies your data. Your entries are kept in a text file that you maintain, and you can rest assured, no automated tool will ever change that data.
+
+- The amount of data required by Ledger is minimal. It figures out from looking at your data what you mean by it and how you want it reported back to you. Accounts are created as they appear; currencies are created as they’re referenced. Anywhere that a value can be calculated, you can leave it out.
+
+- Ledger is a double-entry accounting tool, meaning that all entries must balance. If an entry does not balance, it will cause an error and the report will not be generated. Ledger is always checking the accuracies of your entries at every run; you won’t ever run into problems with “unaccounted” sums in an account.
+
+- Ledger is 100% currency-agnostic. You can store multiple currencies in any account, convert between them, or even pay in one currency and receive change in another.
+
+- Ledger is international. UTF8 is accepted anywhere in data files, Ledger uses ISO format dates, attaches no meaning to the naming of accounts, and can accept data in either US or European decimal formats. It will report currencies back to you following the manner of your own entries.
+
+- Ledger uses a simple set of base commands which can be extended in countless ways. You can create monthly reports, average reports, check account balances, reconcile accounts, keep track of capital gains on stocks, etc.
+
+
 
 
 ### Built With
@@ -102,13 +118,11 @@
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
 Prior to installing and downloading the files you will need to have Python installed. You can find the installation instructions [here](https://www.python.org/downloads/). Or run the following command to install Python.
-* npm
   ```sh
   brew install python
   ```
@@ -139,29 +153,38 @@ This small implementation of the Ledger CLI in Python supports the following com
 
 REQUIRED FLAG:
 - File: Read FILE as a ledger file.
-    -f --file {filename}
+  ```sh
+  python3 ledgertruji.py -f FILE
+  ```
 
 
 REQUIRED COMMAND (Only enter one of the following):
 - Print: The print command prints out ledger transactions in a textual format that can be parsed by Ledger. They will be properly formatted, and output in the most economic form possible.
-    print
+  ```sh
+  python3 ledgertruji.py -f FILE print
+  ```
 
 - Register: The register command displays all the postings occurring in a single account, line by line. The output from register is very close to what a typical checkbook, or single-account ledger, would look like. It also shows a running balance. The final running balance of any register should always be the same as the current balance of that account.
-    reg register
+  ```sh
+  python3 ledgertruji.py -f FILE {reg or register}
+  ```
 
 - Balance: The balance command reports the current balance of all accounts. If an account contains multiple types of commodities, each commodity’s total is reported separately.
-    bal balance
-
+  ```sh
+  python3 ledgertruji.py -f FILE {bal or balance}
+  ```
 
 OPTIONAL FLAGS:
-- File: Read FILE as a ledger file.
-    -f --file {filename}
-
 - Sort: Sort the register or print report based on the date the postings were made.
-    -s --sort {d}
+  ```sh
+  python3 ledgertruji.py -f FILE command --sort d
+  ```
 
 - Price-DB: Use FILE for retrieving stored commodity prices. Display values in terms of the given currency or commodity. The specified currency or commodity must be in the price-db.
-    -p --price-db {filename currency/commodity}
+  ```sh
+  python3 ledgertruji.py -f FILE command --price-db FILE
+  ```
+  ```
 
 
 
@@ -172,9 +195,11 @@ OPTIONAL FLAGS:
 <!-- ROADMAP -->
 ## Roadmap
 
-- [] Colored Results (negative numbers in red!)
-- [] Filter results based on a regex input
-- [] Multiple reports
+List of planned features:
+
+- Colored Results (negative numbers in red!)
+- Filter results based on a regex input
+- Multiple reports
 
 See the [open issues](https://github.com/trujillo9616/BreakableToy/issues) for a full list of proposed features (and known issues).
 
@@ -212,7 +237,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Adrian Trujillo - [@trujillo9616](https://twitter.com/trujillo9616)com
+Adrian Trujillo - [@trujillo9616](https://twitter.com/trujillo9616)
 
 Project Link: [https://github.com/trujillo9616/BreakableToy](https://github.com/trujillo9616/BreakableToy)
 
