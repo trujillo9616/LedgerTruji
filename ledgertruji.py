@@ -212,7 +212,7 @@ def parse(data):
         amount1, account2, amount2))
 
 #PRINT COMMAND
-def print_ledger(transactions, sort=False, *filters):
+def print_ledger(transactions, sort=None, *filters):
     """
     print_ledger Function: Print the ledger transactions of the inputed file.
 
@@ -224,12 +224,15 @@ def print_ledger(transactions, sort=False, *filters):
     """
 
     #Sort the transactions
-    if sort:
+    if sort == 'date':
+        print('Sorting by date...\n')
         transactions.sort(key=lambda x: x.date)
+    elif sort == 'comment':
+        print('Sorting by comment...\n')
+        transactions.sort(key=lambda x: x.comment)
 
     #Print the transactions
     for t in transactions:
-
         #Formated color printing
         if t.amount1[1] < 0:
             amount1 = red + t.amount1[0] + ' ' + '{:.2f}'.format(t.amount1[1]) + white
@@ -249,7 +252,7 @@ def print_ledger(transactions, sort=False, *filters):
             print('\t\t' + (purple+'{:30}'.format(t.account2)+white) + '\t\t\t\t' + amount2)
 
 #REGISTER COMMAND
-def register_ledger(transactions, sort=False, *filters):
+def register_ledger(transactions, sort=None, *filters):
     """
     register_ledger Function: Prints a register of the transactions.
 
@@ -264,8 +267,12 @@ def register_ledger(transactions, sort=False, *filters):
     balance = collections.defaultdict(float)
 
     #Sort the transactions
-    if sort:
+    if sort == 'date':
+        print('Sorting by date...\n')
         transactions.sort(key=lambda x: x.date)
+    elif sort == 'comment':
+        print('Sorting by comment...\n')
+        transactions.sort(key=lambda x: x.comment)
 
     #Make the register
     for t in transactions:
@@ -402,7 +409,7 @@ parser = argparse.ArgumentParser(
     epilog='Created by: Adrian Trujillo in the Apprentice Program by Encora.')
 
 parser.add_argument('-f', '--file', help='Input a file to read.', required=True)
-parser.add_argument('-s', '--sort', help='Sort by date.')
+parser.add_argument('-s', '--sort', help='Sort by date or name.')
 parser.add_argument('--price-db', nargs=2, help='Load a DB for currencies and commodities.')
 parser.add_argument("command",
     default="print",
@@ -420,8 +427,10 @@ if args.file:
     parse(data)
 
 #Sort flag
-if args.sort:
-    sort = True
+if args.sort == 'd':
+    sort = 'date'
+elif args.sort == 'c':
+    sort = 'comment'
 
 #Price DB flag
 if args.price_db:
