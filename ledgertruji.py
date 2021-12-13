@@ -409,10 +409,9 @@ parser = argparse.ArgumentParser(
     epilog='Created by: Adrian Trujillo in the Apprentice Program by Encora.')
 
 parser.add_argument('-f', '--file', help='Input a file to read.', required=True)
-parser.add_argument('-s', '--sort', help='Sort by date or name.')
-parser.add_argument('--price-db', nargs=2, help='Load a DB for currencies and commodities.')
+parser.add_argument('-s', '--sort', help='Sort by date or comment.')
+parser.add_argument('--price-db', nargs=2, help='Load a DB for exchanging currencies and commodities.')
 parser.add_argument("command",
-    default="print",
     choices=['balance', 'bal','register', 'reg', 'print'],
     help='Select a command to implement.')
 
