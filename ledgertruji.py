@@ -102,7 +102,7 @@ def readfile(filename):
                 if line.startswith(';'):
                     continue
                 if line.startswith('!include'):
-                    readfile(line.split()[1])
+                    readfile(line.split()[1])  #<-- Recursive call
                     continue
                 data.append(line)
     except FileNotFoundError:
@@ -209,7 +209,7 @@ def parse(data):
         amount1, account2, amount2))
 
 #PRINT COMMAND
-def print_ledger(transactions, sort=False, *regex):
+def print_ledger(transactions, sort=False, *filters):
     """
     print_ledger Function: Print the ledger transactions of the inputed file.
 
@@ -245,7 +245,7 @@ def print_ledger(transactions, sort=False, *regex):
             print('\t\t' + (purple+'{:30}'.format(t.account2)+white) + '\t\t\t\t' + amount2)
 
 #REGISTER COMMAND
-def register_ledger(transactions, sort=False, *regex):
+def register_ledger(transactions, sort=False, *filters):
     """
     register_ledger Function: Prints a register of the transactions.
 
@@ -287,7 +287,6 @@ def register_ledger(transactions, sort=False, *regex):
 
     print(tabulate(register, headers))
 
-
 #COLOR BALANCE Helper Function
 def colorbalance(balance):
     """
@@ -314,17 +313,18 @@ def print_node(node):
 
     :return: The information for the node and its children.
     """
+    colorbal = colorbalance(node.balance)
     if len(node.children) == 1:
-        bal.append([''.join('%s %.2f\n'% (key, val) for (key, val) in node.balance.items()),
+        bal.append([''.join('%s\n'% (val) for (key, val) in colorbal.items()),
             purple+node.name+':'+node.children[0].name+white])
     else:
-        bal.append([''.join('%s %.2f\n'% (key, val) for (key, val) in node.balance.items()),
+        bal.append([''.join('%s\n'% (val) for (key, val) in colorbal.items()),
             purple+node.name+white])
         for childnode in node.children:
             print_node(childnode) #<-- Recursive function
 
 #BALANCE COMMAND
-def balance_ledger(transactions, *regex):
+def balance_ledger(transactions, *filters):
     """
     balance_ledger Function: Prints a balance of the accounts.
 
@@ -371,7 +371,8 @@ def balance_ledger(transactions, *regex):
         print_node(x)
 
     bal.append(['----------------', ' '])
-    bal.append([''.join('%s %.2f\n'% (key, val) for (key, val) in tree.root.balance.items()),
+    colorbal = colorbalance(tree.root.balance)
+    bal.append([''.join('%s\n'% (val) for (key, val) in colorbal.items()),
     ' '])
 
     print(tabulate(bal, headers))
