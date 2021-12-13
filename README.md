@@ -184,7 +184,6 @@ OPTIONAL FLAGS:
   ```sh
   python3 ledgertruji.py -f FILE command --price-db FILE
   ```
-  ```
 
 
 

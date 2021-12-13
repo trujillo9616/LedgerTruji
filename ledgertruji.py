@@ -18,6 +18,7 @@ transactions = []
 bal = []
 sort = False
 balance = collections.defaultdict(float)
+colorbal = collections.defaultdict(str)
 exchange = collections.defaultdict(float)
 purple = fg('blue')
 white = fg('white')
@@ -225,23 +226,23 @@ def print_ledger(transactions, sort=False, *regex):
 
     #Print the transactions
     for t in transactions:
+
+        #Formated color printing
         if t.amount1[1] < 0:
-            t.amount1[0] = red + t.amount1[0] + white
-            amount1 = red + '{:.3f}'.format(t.amount1[1]) + white
+            amount1 = red + t.amount1[0] + ' ' + '{:.2f}'.format(t.amount1[1]) + white
         else:
-            amount1 = '{:.3f}'.format(t.amount1[1])
+            amount1 = t.amount1[0] + ' ' + '{:.2f}'.format(t.amount1[1])
         if t.amount2[1] < 0:
-            t.amount2[0] = red + t.amount2[0] + white
-            amount2 = red + '{:.3f}'.format(t.amount2[1]) + white
+            amount2 = red + t.amount2[0] + ' ' + '{:.2f}'.format(t.amount2[1]) + white
         else:
-            amount2 = '{:.3f}'.format(t.amount2[1])
+            amount2 = t.amount2[0] + ' ' + '{:.2f}'.format(t.amount2[1])
 
         print(str(t.date) + ' ' + '{:<30}'.format(t.comment))
-        print('\t\t' + (purple+'{:30}'.format(t.account1)+white) + '\t\t\t\t' + t.amount1[0]+' '+amount1)
+        print('\t\t' + (purple+'{:30}'.format(t.account1)+white) + '\t\t\t\t' + amount1)
         if abs(t.amount1[1]) == abs(t.amount2[1]):
             print('\t\t' + (purple+'{:30}'.format(t.account2)+white))
         else:
-            print('\t\t' + (purple+'{:30}'.format(t.account2)+white) + '\t\t\t\t' + t.amount2[0]+' '+amount2)
+            print('\t\t' + (purple+'{:30}'.format(t.account2)+white) + '\t\t\t\t' + amount2)
 
 #REGISTER COMMAND
 def register_ledger(transactions, sort=False, *regex):
@@ -264,19 +265,47 @@ def register_ledger(transactions, sort=False, *regex):
 
     #Make the register
     for t in transactions:
+        #Formated color printing
+        if t.amount1[1] < 0:
+            amount1 = red + t.amount1[0] + ' ' + '{:.2f}'.format(t.amount1[1]) + white
+        else:
+            amount1 = t.amount1[0] + ' ' + '{:.2f}'.format(t.amount1[1])
+        if t.amount2[1] < 0:
+            amount2 = red + t.amount2[0] + ' ' + '{:.2f}'.format(t.amount2[1]) + white
+        else:
+            amount2 = t.amount2[0] + ' ' + '{:.2f}'.format(t.amount2[1])
         #Update the balance for amount 1
         balance[t.amount1[0]] += t.amount1[1]
-        register.append([t.date, t.comment, purple+t.account1+white, t.amount1[0] + ' ' +
-        '{:.3f}'.format(t.amount1[1]), ''.join('%s %.2f\n'% (key, val) for (key, val) in balance.items())])
+        colorbal = colorbalance(balance)
+        register.append([t.date, t.comment, purple+t.account1+white, amount1, ''.join('%s\n'% (val) for (key, val) in colorbal.items())])
         #Update the balance for amount 2
         balance[t.amount2[0]] += t.amount2[1]
-        register.append(['', '', purple+t.account2+white, t.amount2[0] + ' ' + '{:.3f}'.format(t.amount2[1]),
-        ''.join('%s %.2f\n'% (key, val) for (key, val) in balance.items())])
+        colorbal = colorbalance(balance)
+        register.append(['', '', purple+t.account2+white, amount2,
+        ''.join('%s\n'% (val) for (key, val) in colorbal.items())])
         register.append(['- ',' ',' ',' ',' '])
 
     print(tabulate(register, headers))
 
-#PRINT NODE Function
+
+#COLOR BALANCE Helper Function
+def colorbalance(balance):
+    """
+    colorbalance Function: Helper function to format the outputed balance.
+
+    :param blance: The balance dictionary to be formatted.
+
+    :return: THe formatted balance in a new dictionary to preseve the original variable.
+    """
+    colored = balance.copy()
+    for key in colored:
+        if colored[key] < 0:
+            colored[key] = red + key + ' '+ '{:.2f}'.format(colored[key]) + white
+        else:
+            colored[key] = key + ' ' + '{:.2f}'.format(colored[key])
+    return colored
+
+#PRINT NODE Helper Function
 def print_node(node):
     """
     print_node Function: Stores the information of the nodes in an array for printing.
@@ -391,3 +420,4 @@ if args.command in ['balance', 'bal']:
 
 if args.command in ['register', 'reg']:
     register_ledger(transactions, sort)
+
