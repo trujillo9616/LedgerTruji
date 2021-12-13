@@ -20,7 +20,7 @@ sort = False
 balance = collections.defaultdict(float)
 colorbal = collections.defaultdict(str)
 exchange = collections.defaultdict(float)
-purple = fg('blue')
+purple = fg('blue') #No support for purple color in colored :(
 white = fg('white')
 red = fg('red')
 defaultcurrency = '$'
@@ -94,7 +94,7 @@ def readfile(filename):
 
     :param filename: Define the file's location.
 
-    :return: Nothing. Creates a data variable with the file's content.
+    :return: Nothing. Updates the data variable with the file's content.
     """
     try:
         with open(filename) as f:
@@ -112,11 +112,11 @@ def readfile(filename):
 #READ PRICE-DB Function
 def read_pricedb(filename):
     """
-    read_pricedb Function: Parses a Price-DB file and stores the content variable exchange.
+    read_pricedb Function: Parses a Price-DB file and stores the content in variable exchange.
 
     :param filename: Define the file's location.
 
-    :return: Nothing. Creates an exchange variable with the file's content
+    :return: Nothing. Update the exchange variable with the file's content
     """
     exchange['$'] = 1.0
     pattern = re.compile(r'\b\d[\d,.]*\b')
@@ -149,6 +149,7 @@ def exchange_values(transactions, exchange, currency=defaultcurrency):
     :return: Nothing. Modifies the amounts and currencies in the transactions array.
     """
     if currency in exchange:
+        #Iterate over the transactions and exchange the currencies
         for tr in transactions:
             if not tr.amount1[0] == currency:
                 if not tr.amount1[0] == '$':
@@ -166,7 +167,9 @@ def exchange_values(transactions, exchange, currency=defaultcurrency):
                 tr.amount2[1] /= exchange[currency]
                 tr.amount2[0] = currency
     else:
-        print('Currency not found in Price-DB, please check the currency or update the Price-DB.')
+        #Print error if selecrted currency is not in the price-db
+        print(red + 'Currency not found in Price-DB, please check the currency or update the Price-DB.' + white +
+        '\nPrinting the Report without exchange rates.\n')
 
 #PARSE Function
 def parse(data):
@@ -237,6 +240,7 @@ def print_ledger(transactions, sort=False, *filters):
         else:
             amount2 = t.amount2[0] + ' ' + '{:.2f}'.format(t.amount2[1])
 
+        #Print the transaction
         print(str(t.date) + ' ' + '{:<30}'.format(t.comment))
         print('\t\t' + (purple+'{:30}'.format(t.account1)+white) + '\t\t\t\t' + amount1)
         if abs(t.amount1[1]) == abs(t.amount2[1]):
@@ -294,7 +298,7 @@ def colorbalance(balance):
 
     :param blance: The balance dictionary to be formatted.
 
-    :return: THe formatted balance in a new dictionary to preseve the original variable.
+    :return: The formatted balance in a new dictionary to preserve the original variable.
     """
     colored = balance.copy()
     for key in colored:
@@ -314,9 +318,11 @@ def print_node(node):
     :return: The information for the node and its children.
     """
     colorbal = colorbalance(node.balance)
+    #If there are no children, print the node
     if len(node.children) == 1:
         bal.append([''.join('%s\n'% (val) for (key, val) in colorbal.items()),
             purple+node.name+':'+node.children[0].name+white])
+    #If there are children, print the node and its children
     else:
         bal.append([''.join('%s\n'% (val) for (key, val) in colorbal.items()),
             purple+node.name+white])
@@ -338,20 +344,25 @@ def balance_ledger(transactions, *filters):
     tree.root = currentnode
 
     for t in transactions:
-        #Add the accounts to the tree
+        #Make a helper array for easier iteration
         tr = [[t.account1, t.amount1], [t.account2, t.amount2]]
 
         for i in tr:
+            #Update main tree balance
             currentnode.balance[i[1][0]] += i[1][1]
 
+            #Split and iterate through the accounts
             for account in i[0].split(':'):
                 account = account.strip()
                 nextnode = None
+
+                #Check if the account is already in the tree
                 for child in currentnode.children:
                     if child.name == account:
                         nextnode = child
                         break
 
+                #If not, create a new node
                 if nextnode:
                     currentnode = nextnode
                 else:
@@ -359,17 +370,22 @@ def balance_ledger(transactions, *filters):
                     currentnode.children.append(newnode)
                     currentnode = newnode
 
+                #Update current node balance
                 currentnode.balance[i[1][0]] += i[1][1]
 
+            #Return to root node
             currentnode = tree.root
 
+    #Sort the tree by name
     tree.root.children.sort(key=lambda x: x.name)
 
     headers = ['Balance', 'Account']
 
+    #Print the tree's children
     for x in tree.root.children:
         print_node(x)
 
+    #Append the root balance
     bal.append(['----------------', ' '])
     colorbal = colorbalance(tree.root.balance)
     bal.append([''.join('%s\n'% (val) for (key, val) in colorbal.items()),
