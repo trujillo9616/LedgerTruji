@@ -15,6 +15,7 @@ from colored import fg
 data = []
 data_prices = []
 transactions = []
+bal = []
 sort = False
 balance = collections.defaultdict(float)
 exchange = collections.defaultdict(float)
@@ -24,7 +25,7 @@ red = fg('red')
 defaultcurrency = '$'
 
 #Defining the Transaction class
-class Transaction:
+class Transaction():
     def __init__(self, date, comment, account1, amount1, account2, amount2=None):
         self.date = date
         self.comment = comment
@@ -74,6 +75,16 @@ class Transaction:
                 else:
                     self.amount2 = [amount2[0], float(amount2[1:])]
 
+#Defining the Main Tree class
+class Main():
+    pass
+
+#Defining the Node class
+class Node():
+    def __init__(self, name):
+        self.children = []
+        self.balance = collections.defaultdict(float)
+        self.name = name
 
 #READFILE Function
 def readfile(filename):
@@ -134,26 +145,29 @@ def exchange_values(transactions, exchange, currency=defaultcurrency):
 
     :param transactions: The transactions array with the data.
     :param exchange: A dictionary with the exchange rates.
-    :param currency: The destination currency.
+    :param currency: The destination currency. Default currency is USD $.
 
     :return: Nothing. Modifies the amounts and currencies in the transactions array.
     """
-    for tr in transactions:
-        if not tr.amount1[0] == currency:
-            if not tr.amount1[0] == '$':
-                tr.amount1[1] *= exchange[tr.amount1[0]]
-                tr.amount1[0] = '$'
+    if currency in exchange:
+        for tr in transactions:
+            if not tr.amount1[0] == currency:
+                if not tr.amount1[0] == '$':
+                    tr.amount1[1] *= exchange[tr.amount1[0]]
+                    tr.amount1[0] = '$'
 
-            tr.amount1[1] /= exchange[currency]
-            tr.amount1[0] = currency
+                tr.amount1[1] /= exchange[currency]
+                tr.amount1[0] = currency
 
-        if not tr.amount2[0] == currency:
-            if not tr.amount2[0] == '$':
-                tr.amount2[1] *= exchange[tr.amount2[0]]
-                tr.amount2[0] = '$'
+            if not tr.amount2[0] == currency:
+                if not tr.amount2[0] == '$':
+                    tr.amount2[1] *= exchange[tr.amount2[0]]
+                    tr.amount2[0] = '$'
 
-            tr.amount2[1] /= exchange[currency]
-            tr.amount2[0] = currency
+                tr.amount2[1] /= exchange[currency]
+                tr.amount2[0] = currency
+    else:
+        print('Currency not found in Price-DB, please check the currency or update the Price-DB.')
 
 
 #PARSE Function
@@ -215,12 +229,23 @@ def print_ledger(transactions, sort=False, *regex):
 
     #Print the transactions
     for t in transactions:
+        if t.amount1[1] < 0:
+            t.amount1[0] = red + t.amount1[0] + white
+            amount1 = red + '{:.3f}'.format(t.amount1[1]) + white
+        else:
+            amount1 = '{:.3f}'.format(t.amount1[1])
+        if t.amount2[1] < 0:
+            t.amount2[0] = red + t.amount2[0] + white
+            amount2 = red + '{:.3f}'.format(t.amount2[1]) + white
+        else:
+            amount2 = '{:.3f}'.format(t.amount2[1])
+
         print(str(t.date) + ' ' + '{:<30}'.format(t.comment))
-        print('\t\t' + (purple+'{:30}'.format(t.account1)+white) + '\t\t\t\t' + t.amount1[0]+''+str(t.amount1[1]))
+        print('\t\t' + (purple+'{:30}'.format(t.account1)+white) + '\t\t\t\t' + t.amount1[0]+' '+amount1)
         if abs(t.amount1[1]) == abs(t.amount2[1]):
             print('\t\t' + (purple+'{:30}'.format(t.account2)+white))
         else:
-            print('\t\t' + (purple+'{:30}'.format(t.account2)+white) + '\t\t\t\t' + t.amount2[0]+''+str(t.amount2[1]))
+            print('\t\t' + (purple+'{:30}'.format(t.account2)+white) + '\t\t\t\t' + t.amount2[0]+' '+amount2)
 
 
 
@@ -248,14 +273,34 @@ def register_ledger(transactions, sort=False, *regex):
         #Update the balance for amount 1
         balance[t.amount1[0]] += t.amount1[1]
         register.append([t.date, t.comment, purple+t.account1+white, t.amount1[0] + ' ' +
-        str(t.amount1[1]), ''.join('%s %.2f\n'% (key, val) for (key, val) in balance.items())])
+        '{:.3f}'.format(t.amount1[1]), ''.join('%s %.2f\n'% (key, val) for (key, val) in balance.items())])
         #Update the balance for amount 2
         balance[t.amount2[0]] += t.amount2[1]
-        register.append(['', '', purple+t.account2+white, t.amount2[0] + ' ' + str(t.amount2[1]),
+        register.append(['', '', purple+t.account2+white, t.amount2[0] + ' ' + '{:.3f}'.format(t.amount2[1]),
         ''.join('%s %.2f\n'% (key, val) for (key, val) in balance.items())])
         register.append(['- ',' ',' ',' ',' '])
 
     print(tabulate(register, headers))
+
+
+
+#PRINT NODE Function
+def print_node(node):
+    """
+    print_node Function: Stores the information of the nodes in an array for printing.
+
+    :param node: Node object to be printed.
+
+    :return: The information for the node and its children.
+    """
+    if len(node.children) == 1:
+        bal.append([''.join('%s %.2f\n'% (key, val) for (key, val) in node.balance.items()),
+            purple+node.name+':'+node.children[0].name+white])
+    else:
+        bal.append([''.join('%s %.2f\n'% (key, val) for (key, val) in node.balance.items()),
+            purple+node.name+white])
+        for childnode in node.children:
+            print_node(childnode) #<-- Recursive function
 
 
 
@@ -269,11 +314,49 @@ def balance_ledger(transactions, *regex):
 
     :return: Print onto console the balance of the accounts.
     """
-    pass
 
+    tree = Main()
+    currentnode = Node('root')
+    tree.root = currentnode
 
+    for t in transactions:
+        #Add the accounts to the tree
+        tr = [[t.account1, t.amount1], [t.account2, t.amount2]]
 
+        for i in tr:
+            currentnode.balance[i[1][0]] += i[1][1]
 
+            for account in i[0].split(':'):
+                account = account.strip()
+                nextnode = None
+                for child in currentnode.children:
+                    if child.name == account:
+                        nextnode = child
+                        break
+
+                if nextnode:
+                    currentnode = nextnode
+                else:
+                    newnode = Node(account)
+                    currentnode.children.append(newnode)
+                    currentnode = newnode
+
+                currentnode.balance[i[1][0]] += i[1][1]
+
+            currentnode = tree.root
+
+    tree.root.children.sort(key=lambda x: x.name)
+
+    headers = ['Balance', 'Account']
+
+    for x in tree.root.children:
+        print_node(x)
+
+    bal.append(['----------------', ' '])
+    bal.append([''.join('%s %.2f\n'% (key, val) for (key, val) in tree.root.balance.items()),
+    ' '])
+
+    print(tabulate(bal, headers))
 
 
 
@@ -286,7 +369,7 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument('-f', '--file', help='Input a file to read.', required=True)
 parser.add_argument('-s', '--sort', help='Sort by date.')
-parser.add_argument('--price-db', help='Load a DB for currencies and commodities.')
+parser.add_argument('--price-db', nargs=2, help='Load a DB for currencies and commodities.')
 parser.add_argument("command",
     default="print",
     choices=['balance', 'bal','register', 'reg', 'print'],
@@ -295,7 +378,6 @@ parser.add_argument("command",
 #Parsing the inputed arguments
 args = parser.parse_args()
 
-
 #Calling the functions defined above, depending on the inputed commands and flags
 
 #File flag
@@ -303,20 +385,21 @@ if args.file:
     readfile(args.file)
     parse(data)
 
+#Sort flag
 if args.sort:
     sort = True
 
+#Price DB flag
 if args.price_db:
-    read_pricedb(args.price_db)
-    print(exchange)
-
+    read_pricedb(args.price_db[0])
+    exchange_values(transactions, exchange, args.price_db[1])
 
 #Commands
 if args.command == 'print':
     print_ledger(transactions, sort)
 
 if args.command in ['balance', 'bal']:
-    print("Balance Function")
+    balance_ledger(transactions)
 
 if args.command in ['register', 'reg']:
     register_ledger(transactions, sort)
