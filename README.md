@@ -179,6 +179,7 @@ OPTIONAL FLAGS:
 <img src="images/sort by comment.png" alt="Sort by comment">
 </div>
 - Price-DB: Use FILE for retrieving stored commodity prices. Display values in terms of the given currency or commodity. The specified currency or commodity must be in the price-db.
+
   ```sh
   python3 ledgertruji.py -f FILE command --price-db FILE CURRENCY
   ```
