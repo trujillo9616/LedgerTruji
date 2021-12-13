@@ -40,7 +40,7 @@
   <p align="center">
     A simple Ledger CLI implementation in Python.
     <br />
-    <a href="https://github.com/trujllo9616/BreakableToy"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/trujillo9616/BreakableToy"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/trujillo9616/BreakableToy">View Demo</a>
